@@ -73,10 +73,8 @@ if __name__ == '__main__':
     DD_BOT_TOKEN = os.getenv("DD_BOT_TOKEN")
     DD_BOT_SECRET = os.getenv("DD_BOT_SECRET")
     res = json.loads(res)
-    result = json.loads(res["result"])
     dingpush = dingPush.dingpush(
-        "青年大学习签到结果",
-        "青年大学习签到成功：\n" + "状态码：" + res["status"] + "\n课程ID: " + current_course +
-        "\n签到学号: " + result["cardNo"] + "\n签到时间: " + result["lastUpdTime"], "",
-        DD_BOT_TOKEN, DD_BOT_SECRET)
+        "青年大学习签到结果", "青年大学习签到成功：\n" + "状态码：" + res["status"] + "\n课程ID: " +
+        current_course + "\n签到学号: " + res["result"]["cardNo"] + "\n签到时间: " +
+        res["result"]["lastUpdTime"], "", DD_BOT_TOKEN, DD_BOT_SECRET)
     dingpush.SelectAndPush()
