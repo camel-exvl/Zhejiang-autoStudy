@@ -4,13 +4,15 @@ import time
 
 import requests
 
+import dingPush
+
 
 def getAccessToken(session, openid):
     time_stamp = str(int(time.time()))  #获取时间戳
     url = "https://qczj.h5yunban.com/qczj-youth-learning/cgi-bin/login/we-chat/callback?callback=https%3A%2F%2Fqczj.h5yunban.com%2Fqczj-youth-learning%2Findex.php&scope=snsapi_userinfo&appid=wx56b888a1409a2920&openid=" + openid + "&nickname=ZhangSan&headimg=&time=" + time_stamp + "&source=common&sign=&t=" + time_stamp
     res = session.get(url)
     access_token = res.text[45:81]
-    print("获取到AccessToken:", access_token)
+    print("INFO: 获取到AccessToken:", access_token)
     return access_token
 
 
@@ -19,10 +21,10 @@ def getCurrentCourse(session, access_token):
     res = session.get(url)
     res_json = json.loads(res.text)
     if (res_json["status"] == 200):
-        print("获取到最新课程代号:", res_json["result"]["id"])
+        print("INFO: 获取到最新课程代号:", res_json["result"]["id"])
         return res_json["result"]["id"]
     else:
-        raise Exception("获取最新课程失败！")
+        raise Exception("INFO: 获取最新课程失败！")
 
 
 def getJoin(session, access_token, current_course, nid, cardNo):
@@ -34,13 +36,13 @@ def getJoin(session, access_token, current_course, nid, cardNo):
     }
     url = "https://qczj.h5yunban.com/qczj-youth-learning/cgi-bin/user-api/course/join?accessToken=" + access_token
     res = session.post(url, json=data)
-    print("签到结果:", res.text)
+    print("INFO: 签到结果:", res.text)
     res_json = json.loads(res.text)
     if (res_json["status"] == 200):
-        print("似乎签到成功了")
-        return True
+        print("INFO: 签到成功")
+        return res.text
     else:
-        raise Exception("签到失败！")
+        raise Exception("INFO: 签到失败！")
 
 
 if __name__ == '__main__':
@@ -64,6 +66,11 @@ if __name__ == '__main__':
 
         # 签到
         time.sleep(5)
-        getJoin(session, access_token, current_course, nid, cardNo)
+        result = getJoin(session, access_token, current_course, nid, cardNo)
     except Exception as e:
-        print(e)
+        print("ERROR: "+e)
+
+    DD_BOT_TOKEN = os.getenv("DD_BOT_TOKEN")
+    DD_BOT_SECRET = os.getenv("DD_BOT_SECRET")
+    dingPush.dingTalk(DD_BOT_TOKEN, DD_BOT_SECRET,
+                      "青年大学习签到成功：\n" + "签到结果：" + result)
