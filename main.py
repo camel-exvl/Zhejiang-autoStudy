@@ -66,13 +66,17 @@ if __name__ == '__main__':
 
         # 签到
         time.sleep(5)
-        result = getJoin(session, access_token, current_course, nid, cardNo)
+        res = getJoin(session, access_token, current_course, nid, cardNo)
     except Exception as e:
-        print("ERROR: "+e)
-        
+        print("ERROR: " + e)
+
     DD_BOT_TOKEN = os.getenv("DD_BOT_TOKEN")
     DD_BOT_SECRET = os.getenv("DD_BOT_SECRET")
-    dingpush = dingPush.dingpush("青年大学习签到结果",
-                                 "青年大学习签到成功：\n" + "签到结果：" + result, "",
-                                 DD_BOT_TOKEN, DD_BOT_SECRET)
+    res = json.loads(res)
+    result = json.loads(res["result"])
+    dingpush = dingPush.dingpush(
+        "青年大学习签到结果",
+        "青年大学习签到成功：\n" + "状态码：" + res["status"] + "\n课程ID: " + current_course +
+        "\n签到学号: " + result["cardNo"] + "\n签到时间: " + result["lastUpdTime"], "",
+        DD_BOT_TOKEN, DD_BOT_SECRET)
     dingpush.SelectAndPush()
