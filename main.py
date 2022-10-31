@@ -69,8 +69,10 @@ if __name__ == '__main__':
         result = getJoin(session, access_token, current_course, nid, cardNo)
     except Exception as e:
         print("ERROR: "+e)
-
+        
     DD_BOT_TOKEN = os.getenv("DD_BOT_TOKEN")
     DD_BOT_SECRET = os.getenv("DD_BOT_SECRET")
-    dingPush.dingTalk(DD_BOT_TOKEN, DD_BOT_SECRET,
-                      "青年大学习签到成功：\n" + "签到结果：" + result)
+    dingpush = dingPush.dingpush("青年大学习签到结果",
+                                 "青年大学习签到成功：\n" + "签到结果：" + result, "",
+                                 DD_BOT_TOKEN, DD_BOT_SECRET)
+    dingpush.SelectAndPush()
