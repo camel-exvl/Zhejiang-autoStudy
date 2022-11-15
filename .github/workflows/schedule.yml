@@ -13,19 +13,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: 'Checkout'
+      uses: actions/checkout@v3
     
-    - name: 'set python'
+    - name: 'Setup python'
       uses: actions/setup-python@v4
       with:
           python-version: '3.8'
-    - name: 'install dependencies'
+    - name: 'Install pip'
       run: python3 -m pip install --upgrade pip
 
-    - name: 'install libs'
+    - name: 'Install libs'
       run: pip3 install requests
 
-    - name: startCheck
+    - name: 'Start check'
       env:
        nid: ${{ secrets.nid }}
        cardNo: ${{ secrets.cardNo }}
