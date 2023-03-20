@@ -6,7 +6,7 @@ on:
   watch:
     types: [ started ]
   schedule:
-    - cron: '20 18 * * 1,2'
+    - cron: '20 18,19 * * 1,0'
 
 jobs:
   autostudy:
