@@ -49,6 +49,8 @@ if __name__ == '__main__':
     nid = os.getenv("nid")
     cardNo = os.getenv("cardNo")
     openid = os.getenv("openid")
+    DD_BOT_TOKEN = os.getenv("DD_BOT_TOKEN")
+    DD_BOT_SECRET = os.getenv("DD_BOT_SECRET")
 
     session = requests.session()
     session.headers = {
@@ -71,8 +73,6 @@ if __name__ == '__main__':
         res, checkFlag = getJoin(session, access_token, current_course, nid,
                                  cardNo)
 
-        DD_BOT_TOKEN = os.getenv("DD_BOT_TOKEN")
-        DD_BOT_SECRET = os.getenv("DD_BOT_SECRET")
         res = json.loads(res)
         dingpush = dingPush.dingpush(
             "【青年大学习签到】",
@@ -86,7 +86,7 @@ if __name__ == '__main__':
         try:
             dingPush = dingPush.dingpush(
                 "【青年大学习签到】",
-                "青年大学习签到出现问题：\n" + str(e) + "\n是否完成签到：" + str(checkFlag), "",
+                "青年大学习签到出现异常：\n" + str(e) + "\n是否完成签到：" + str(checkFlag), "",
                 DD_BOT_TOKEN, DD_BOT_SECRET)
         except Exception as e:
             print("ERROR: " + str(e))
