@@ -42,7 +42,7 @@ def getJoin(session, access_token, current_course, nid, cardNo):
         print("INFO: 签到成功")
         return res.text, True
     else:
-        raise Exception("INFO: 签到失败！")
+        raise Exception(res_json["message"])
 
 
 if __name__ == '__main__':
@@ -84,9 +84,10 @@ if __name__ == '__main__':
     except Exception as e:
         print("WARNING: " + str(e))
         try:
-            dingPush = dingPush.dingpush(
+            dingpush = dingPush.dingpush(
                 "【青年大学习签到】",
                 "青年大学习签到出现异常：\n" + str(e) + "\n是否完成签到：" + str(checkFlag), "",
                 DD_BOT_TOKEN, DD_BOT_SECRET)
+            dingpush.SelectAndPush()
         except Exception as e:
             print("ERROR: " + str(e))
